@@ -27,3 +27,19 @@ I could've installed an existing C++ interpreter like CINT or Cling but I wanted
     $ ./test.cpp
     
 What `cppscript` should then do is use temporary files to call gcc and run the fnal executable.
+
+For example, the following is a very basic re-implementation of `cat`, which reads from stdin and prints on stdout:
+
+    #!/usr/local/bin/cppscript
+    #include <iostream>
+
+    using namespace std;
+
+    int main() {
+        string s;
+        while (cin >> s) {
+            cout << s << endl;
+        }
+        return 0;
+    }
+
