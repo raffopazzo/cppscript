@@ -1,0 +1,27 @@
+#!/bin/bash
+
+inputfilename=$1
+shift
+generatedfilename=`mktemp`
+execfilename=`mktemp`
+err=`mktemp`
+
+function cleanup {
+    rm $generatedfilename $execfilename $err
+}
+
+function leave {
+    cleanup
+    exit $1
+}
+
+sed "1c\// Auto generated from $0" $inputfilename > $generatedfilename
+
+g++ -x c++ $generatedfilename $* -o $execfilename &> $err
+rv=$?
+sed "s#$generatedfilename#$inputfilename#" $err >&2
+if [ $rv -eq 0 ]; then
+    $execfilename
+    rv=$?
+fi
+leave $rv
