@@ -1,10 +1,16 @@
 #!/bin/bash
 
-case $1 in
-	-std=c++11|--std=c++11)
-		cxxflags="$gccargs "$1
-		shift
-esac
+while true
+do
+	case $1 in
+		-*)
+			cxxflags="$gccargs "$1
+			shift
+			;;
+		*)
+			break
+	esac
+done
 
 inputfilename=$1
 shift
