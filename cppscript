@@ -1,5 +1,11 @@
 #!/bin/bash
 
+case $1 in
+	-std=c++11|--std=c++11)
+		cxxflags="$gccargs "$1
+		shift
+esac
+
 inputfilename=$1
 shift
 generatedfilename=`mktemp`
@@ -17,7 +23,7 @@ function leave {
 
 sed "1c\// Auto generated from $0" $inputfilename > $generatedfilename
 
-g++ -x c++ $generatedfilename $* -o $execfilename &> $err
+g++ -x c++ $generatedfilename $* -o $execfilename $cxxflags &> $err
 rv=$?
 sed "s#$generatedfilename#$inputfilename#" $err >&2
 if [ $rv -eq 0 ]; then
