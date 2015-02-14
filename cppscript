@@ -8,6 +8,7 @@ esac
 
 inputfilename=$1
 shift
+args=$*
 generatedfilename=`mktemp`
 execfilename=`mktemp`
 err=`mktemp`
@@ -23,11 +24,11 @@ function leave {
 
 sed "1c\// Auto generated from $0" $inputfilename > $generatedfilename
 
-g++ -x c++ $generatedfilename $* -o $execfilename $cxxflags &> $err
+g++ -x c++ $generatedfilename -o $execfilename $cxxflags &> $err
 rv=$?
 sed "s#$generatedfilename#$inputfilename#" $err >&2
 if [ $rv -eq 0 ]; then
-    $execfilename
+    $execfilename $args
     rv=$?
 fi
 leave $rv
